@@ -14,47 +14,7 @@ The program:
 5. outputs the result (Y) of k-NN Regression if k <= N, or any error message otherwise.
 """
 import numpy as np
-
-class InputReader:
-    """
-    This class provides static methods to read and validate integer and float inputs.
-    """
-    @staticmethod
-    def read_int(prompt: str, min_value: int = None, max_value: int = None) -> int:
-        """Read and validate an integer input.
-        Args:
-            prompt (str): The prompt to display to the user.
-            min_value (int, optional): The minimum value allowed. Defaults to None.
-            max_value (int, optional): The maximum value allowed. Defaults to None.
-        Returns:
-            int: The validated integer input.
-        """
-        while True:
-            try:
-                value = int(input(prompt))
-                if min_value is not None and value < min_value:
-                    print(f"Value must be greater than or equal to {min_value}. Please try again.")
-                    continue
-                if max_value is not None and value > max_value:
-                    print(f"Value must be less than or equal to {max_value}. Please try again.")
-                    continue
-                return value
-            except ValueError:
-                print("Invalid input. Please enter an integer.")
-
-    @staticmethod
-    def read_float(prompt: str) -> float:
-        """Read and validate a float input.
-        Args:
-            prompt (str): The prompt to display to the user.
-        Returns:
-            float: The validated float input.
-        """
-        while True:
-            try:
-                return float(input(prompt))
-            except ValueError:
-                print("Invalid input. Please enter a real number.")
+from input_reader import InputReader
 
 class KNNRegressor:
     """
@@ -108,14 +68,14 @@ def main():
     # Read k.
     k = InputReader.read_int("Enter k (positive integer): ", min_value=1, max_value=N)
     
+    # Pre-allocate NumPy arrays for X and y values.
+    X_train = np.zeros(N)
+    y_train = np.zeros(N)
+    
     # Read N points (x, y).
-    X_train = []
-    y_train = []
     for i in range(N):
-        x = InputReader.read_float(f"Enter x value for point {i+1}: ")
-        y = InputReader.read_float(f"Enter y value for point {i+1}: ")
-        X_train.append(x)
-        y_train.append(y)
+        X_train[i] = InputReader.read_float(f"Enter x value for point {i+1}: ")
+        y_train[i] = InputReader.read_float(f"Enter y value for point {i+1}: ")
     
     # Initialize and train KNNRegressor.
     knn = KNNRegressor()
